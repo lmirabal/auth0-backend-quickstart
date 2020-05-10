@@ -8,13 +8,13 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.http4k:http4k-core:3.246.0")
-    implementation("org.http4k:http4k-server-jetty:3.246.0")
-    implementation("org.http4k:http4k-client-okhttp:3.246.0")
+    implementation(http4k("core"))
+    implementation(http4k("server-jetty"))
+    implementation(http4k("client-okhttp"))
 
-    testImplementation("org.http4k:http4k-testing-hamkrest:3.246.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    testImplementation(http4k("testing-hamkrest"))
+    testImplementation(junit("api"))
+    testRuntimeOnly(junit("engine"))
 }
 
 tasks {
@@ -32,3 +32,6 @@ tasks {
         gradleVersion = "6.4"
     }
 }
+
+fun http4k(module: String) = "org.http4k:http4k-$module:3.246.0"
+fun junit(module: String) = "org.junit.jupiter:junit-jupiter-$module:5.6.2"
