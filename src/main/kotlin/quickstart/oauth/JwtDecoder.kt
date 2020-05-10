@@ -10,12 +10,12 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import java.net.URI
 import java.security.interfaces.RSAPublicKey
 
-class JwtVerifier(private val oauthConfig: OAuthConfig) : (String) -> Boolean {
+class JwtDecoder(private val oauthConfig: OAuthConfig) : (String) -> BearerToken? {
     private val jwkProvider: JwkProvider = GuavaCachedJwkProvider(
         UrlJwkProvider(URI.create(oauthConfig.jwkUrl).toURL())
     )
 
-    override operator fun invoke(bearerToken: String): Boolean = try {
+    override operator fun invoke(bearerToken: String): BearerToken? = try {
         val decodedJwt = JWT.decode(bearerToken)
         val publicKey = jwkProvider.get(decodedJwt.keyId).publicKey as RSAPublicKey
         val verifier = JWT.require(Algorithm.RSA256(publicKey, null))
@@ -23,10 +23,12 @@ class JwtVerifier(private val oauthConfig: OAuthConfig) : (String) -> Boolean {
             .withIssuer(oauthConfig.issuer)
             .build()
         verifier.verify(bearerToken)
-        true
+
+        val scope: String? = decodedJwt.getClaim("scope").asString()
+        BearerToken(scope?.let { TokenScope(it) })
     } catch (e: JWTVerificationException) {
-        false
+        null
     } catch (e: JwkException) {
-        false
+        null
     }
 }
