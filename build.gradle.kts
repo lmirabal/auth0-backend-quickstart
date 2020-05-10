@@ -11,8 +11,11 @@ dependencies {
     implementation(http4k("core"))
     implementation(http4k("server-jetty"))
     implementation(http4k("client-okhttp"))
+    implementation("com.auth0:java-jwt:3.10.3")
+    implementation("com.auth0:jwks-rsa:0.11.0")
 
     testImplementation(http4k("testing-hamkrest"))
+    testImplementation(http4k("format-jackson"))
     testImplementation(junit("api"))
     testRuntimeOnly(junit("engine"))
 }
