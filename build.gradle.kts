@@ -11,6 +11,7 @@ dependencies {
     implementation(http4k("core"))
     implementation(http4k("server-jetty"))
     implementation(http4k("client-okhttp"))
+    implementation(http4k("cloudnative"))
     implementation("com.auth0:java-jwt:3.10.3")
     implementation("com.auth0:jwks-rsa:0.11.0")
 

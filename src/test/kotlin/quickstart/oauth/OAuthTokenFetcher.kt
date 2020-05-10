@@ -10,7 +10,7 @@ import org.http4k.format.Jackson.auto
 
 class OAuthTokenFetcher(private val config: OAuthConfig, private val http: HttpHandler) {
 
-    fun fetch(credentials: Credentials = envCredentials()): TokenResult {
+    fun fetch(credentials: Credentials): TokenResult {
         val tokenResponse = http(
             Request(Method.POST, config.tokenUrl)
                 .with(
@@ -34,8 +34,5 @@ class OAuthTokenFetcher(private val config: OAuthConfig, private val http: HttpH
     companion object {
         val requestLens = Body.auto<TokenRequest>().toLens()
         val resultLens = Body.auto<TokenResult>().toLens()
-
-        fun envCredentials() =
-            Credentials(System.getenv("CLIENT_ID"), System.getenv("CLIENT_SECRET"))
     }
 }
